@@ -1,25 +1,71 @@
 import { getSiteSettings } from "@/lib/queries";
+import Link from "next/link";
 
 export default async function KontakPage() {
   const settings = await getSiteSettings();
 
   return (
-    <main className="max-w-2xl mx-auto py-16 px-6">
-      <h1 className="text-3xl font-bold mb-8">Kontak kami</h1>
-      <div className="space-y-4 text-gray-600">
-        {settings?.email && (
-          <p>📧 <a href={`mailto:${settings.email}`} className="text-blue-700">{settings.email}</a></p>
-        )}
-        {settings?.phone && <p>📞 {settings.phone}</p>}
-        {settings?.address && <p>📍 {settings.address}</p>}
-      </div>
-      <div className="mt-10 border rounded-xl p-6 bg-gray-50">
-        <h2 className="font-semibold text-lg mb-4">Kirim pesan</h2>
-        <div className="space-y-4">
-          <input type="text" placeholder="Nama lengkap" className="w-full border rounded-lg px-4 py-2 text-sm" />
-          <input type="email" placeholder="Email" className="w-full border rounded-lg px-4 py-2 text-sm" />
-          <textarea rows={4} placeholder="Pesan Anda..." className="w-full border rounded-lg px-4 py-2 text-sm" />
-          <button className="bg-blue-900 text-white px-6 py-2 rounded-lg text-sm font-semibold">Kirim pesan</button>
+    <main className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <section className="bg-gradient-to-br from-blue-950 to-blue-900 text-white py-16 px-6 text-center">
+        <h1 className="text-4xl font-bold mb-3">Hubungi kami</h1>
+        <p className="text-blue-200 max-w-xl mx-auto">Kami siap membantu Anda. Kirim pesan dan tim kami akan merespons dalam 1x24 jam.</p>
+      </section>
+
+      <div className="max-w-5xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-3 gap-10">
+        {/* Info kontak */}
+        <div className="flex flex-col gap-6">
+          <h2 className="font-bold text-gray-900 text-lg">Informasi kontak</h2>
+          {[
+            { icon: "✉", label: "Email", value: settings?.email },
+            { icon: "☎", label: "Telepon", value: settings?.phone },
+            { icon: "⊙", label: "Alamat", value: settings?.address },
+          ].map((item) => item.value && (
+            <div key={item.label} className="flex gap-4 items-start">
+              <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0 text-blue-900">
+                {item.icon}
+              </div>
+              <div>
+                <p className="text-xs text-gray-400 font-medium mb-0.5">{item.label}</p>
+                <p className="text-gray-700 text-sm">{item.value}</p>
+              </div>
+            </div>
+          ))}
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <p className="text-xs text-gray-400 mb-3 font-medium">JAM OPERASIONAL</p>
+            <p className="text-sm text-gray-600">Senin – Jumat: 08.00 – 17.00</p>
+            <p className="text-sm text-gray-600">Sabtu: 08.00 – 13.00</p>
+          </div>
+        </div>
+
+        {/* Form kontak */}
+        <div className="md:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+          <h2 className="font-bold text-gray-900 text-lg mb-6">Kirim pesan</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5">Nama lengkap</label>
+              <input type="text" placeholder="John Doe"
+                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900/20 focus:border-blue-900 transition" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5">Email</label>
+              <input type="email" placeholder="john@perusahaan.com"
+                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900/20 focus:border-blue-900 transition" />
+            </div>
+          </div>
+          <div className="mb-4">
+            <label className="block text-xs font-medium text-gray-500 mb-1.5">Nomor telepon</label>
+            <input type="tel" placeholder="08xx xxxx xxxx"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900/20 focus:border-blue-900 transition" />
+          </div>
+          <div className="mb-6">
+            <label className="block text-xs font-medium text-gray-500 mb-1.5">Pesan</label>
+            <textarea rows={5} placeholder="Tuliskan pesan atau pertanyaan Anda..."
+              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900/20 focus:border-blue-900 transition resize-none" />
+          </div>
+          <button className="w-full bg-blue-900 text-white font-semibold py-3 rounded-lg hover:bg-blue-800 transition-colors">
+            Kirim pesan
+          </button>
         </div>
       </div>
     </main>
