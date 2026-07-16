@@ -1,4 +1,4 @@
-export default {
+const product = {
   name: "product",
   title: "Produk / Layanan",
   type: "document",
@@ -10,3 +10,5 @@ export default {
     { name: "image", title: "Gambar", type: "image", options: { hotspot: true } },
   ],
 };
+
+export default product;
