@@ -1,6 +1,8 @@
 import { getSiteSettings, getProducts, getPosts } from "@/lib/queries";
 import Link from "next/link";
 
+export const revalidate = 30;
+
 export default async function Home() {
   const settings = await getSiteSettings();
   const products = await getProducts();
@@ -49,7 +51,7 @@ export default async function Home() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {products.map((p: any) => (
-                <div key={p.slug?.current} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+                <Link href={`/produk/${p.slug?.current}`} key={p.slug?.current} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200 block">
                   <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4">
                     <svg className="w-6 h-6 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -58,7 +60,7 @@ export default async function Home() {
                   <h3 className="font-semibold text-gray-900 text-lg mb-2">{p.name}</h3>
                   <p className="text-gray-500 text-sm mb-4 leading-relaxed">{p.description}</p>
                   {p.price && <p className="text-blue-900 font-semibold text-sm">{p.price}</p>}
-                </div>
+                </Link>
               ))}
             </div>
           )}
@@ -84,14 +86,14 @@ export default async function Home() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {posts.map((post: any) => (
-                <article key={post.slug?.current} className="border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md transition-shadow duration-200">
+                <Link href={`/blog/${post.slug?.current}`} key={post.slug?.current} className="border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md transition-shadow duration-200 block">
                   <div className="bg-gradient-to-br from-blue-50 to-gray-100 h-40" />
                   <div className="p-5">
                     <p className="text-xs text-gray-400 mb-2">{new Date(post.publishedAt).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}</p>
                     <h3 className="font-semibold text-gray-900 mb-2 leading-snug">{post.title}</h3>
                     <p className="text-gray-500 text-sm leading-relaxed">{post.excerpt}</p>
                   </div>
-                </article>
+                </Link>
               ))}
             </div>
           )}
