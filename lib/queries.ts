@@ -1,29 +1,46 @@
 import { client } from "./sanity";
 
-// Ambil semua halaman
 export async function getPages() {
-  return client.fetch(`*[_type == "page"]{ title, slug, description, image }`);
+  return client.fetch(`*[_type == "page" && !(_id in path("drafts.**"))]{ title, slug, description, image }`);
 }
 
-// Ambil satu halaman berdasarkan slug
 export async function getPage(slug: string) {
   return client.fetch(
-    `*[_type == "page" && slug.current == $slug][0]{ title, description, image }`,
+    `*[_type == "page" && slug.current == $slug && !(_id in path("drafts.**"))][0]{ title, description, image }`,
     { slug }
   );
 }
 
-// Ambil semua produk/layanan
 export async function getProducts() {
-  return client.fetch(`*[_type == "product"]{ name, slug, description, price, image }`);
+  return client.fetch(`*[_type == "product" && !(_id in path("drafts.**"))]{ name, slug, description, price, image }`);
 }
 
-// Ambil semua post blog
+export async function getProduct(slug: string) {
+  return client.fetch(
+    `*[_type == "product" && slug.current == $slug && !(_id in path("drafts.**"))][0]{ name, description, price, image, "slug": slug.current }`,
+    { slug }
+  );
+}
+
 export async function getPosts() {
-  return client.fetch(`*[_type == "post"] | order(publishedAt desc){ title, slug, excerpt, publishedAt, image }`);
+  return client.fetch(`*[_type == "post" && !(_id in path("drafts.**"))] | order(publishedAt desc){ title, slug, excerpt, publishedAt, image }`);
 }
 
-// Ambil pengaturan situs
+export async function getPost(slug: string) {
+  return client.fetch(
+    `*[_type == "post" && slug.current == $slug && !(_id in path("drafts.**"))][0]{ title, excerpt, publishedAt, image, body, "slug": slug.current }`,
+    { slug }
+  );
+}
+
 export async function getSiteSettings() {
-  return client.fetch(`*[_type == "siteSettings"][0]{ siteName, tagline, email, phone, address, logo }`);
+  return client.fetch(`*[_type == "siteSettings" && !(_id in path("drafts.**"))][0]{ siteName, tagline, email, phone, address, logo }`);
+}
+
+export async function getAllProductSlugs() {
+  return client.fetch(`*[_type == "product" && !(_id in path("drafts.**"))]{ "slug": slug.current }`);
+}
+
+export async function getAllPostSlugs() {
+  return client.fetch(`*[_type == "post" && !(_id in path("drafts.**"))]{ "slug": slug.current }`);
 }
