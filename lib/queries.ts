@@ -44,3 +44,10 @@ export async function getAllProductSlugs() {
 export async function getAllPostSlugs() {
   return client.fetch(`*[_type == "post" && !(_id in path("drafts.**"))]{ "slug": slug.current }`);
 }
+
+// Ambil semua anggota tim
+export async function getTeam() {
+  return client.fetch(
+    `*[_type == "team" && !(_id in path("drafts.**"))] | order(order asc){ name, position, bio, photo }`
+  );
+}
