@@ -9,8 +9,9 @@ export async function generateStaticParams() {
   return slugs.map((s: any) => ({ slug: s.slug }));
 }
 
-export default async function ProductPage({ params }: { params: { slug: string } }) {
-  const product = await getProduct(params.slug);
+export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const product = await getProduct(slug);
   if (!product) return notFound();
 
   return (
@@ -32,12 +33,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
       <div className="max-w-4xl mx-auto px-6 py-12">
         {product.image && (
           <div className="relative w-full h-72 rounded-2xl overflow-hidden mb-8 shadow-sm">
-            <Image
-              src={urlFor(product.image).width(900).height(500).url()}
-              alt={product.name}
-              fill
-              className="object-cover"
-            />
+            <Image src={urlFor(product.image).width(900).height(500).url()} alt={product.name} fill className="object-cover" />
           </div>
         )}
 
@@ -62,7 +58,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
 
         <div className="bg-blue-900 rounded-2xl p-8 text-white text-center">
           <h2 className="text-xl font-bold mb-3">Tertarik dengan layanan ini?</h2>
-          <p className="text-blue-200 mb-6">Hubungi tim kami sekarang untuk mendapatkan penawaran terbaik.</p>
+          <p className="text-blue-200 mb-6">Hubungi tim kami untuk mendapatkan penawaran terbaik.</p>
           <Link href="/kontak" className="bg-white text-blue-900 font-semibold px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors inline-block">
             Hubungi kami sekarang
           </Link>

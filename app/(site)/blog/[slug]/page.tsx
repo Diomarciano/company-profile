@@ -13,7 +13,6 @@ export async function generateStaticParams() {
 const components = {
   block: {
     normal: ({ children }: any) => <p className="mb-4 leading-relaxed text-gray-700">{children}</p>,
-    h1: ({ children }: any) => <h1 className="text-3xl font-bold mb-4 text-gray-900">{children}</h1>,
     h2: ({ children }: any) => <h2 className="text-2xl font-bold mb-3 text-gray-900 mt-8">{children}</h2>,
     h3: ({ children }: any) => <h3 className="text-xl font-semibold mb-3 text-gray-900 mt-6">{children}</h3>,
     blockquote: ({ children }: any) => (
@@ -30,8 +29,9 @@ const components = {
   },
 };
 
-export default async function PostPage({ params }: { params: { slug: string } }) {
-  const post = await getPost(params.slug);
+export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = await getPost(slug);
   if (!post) return notFound();
 
   return (
@@ -52,12 +52,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
       <div className="max-w-3xl mx-auto px-6 py-12">
         {post.image && (
           <div className="relative w-full h-72 rounded-2xl overflow-hidden mb-8 shadow-sm">
-            <Image
-              src={urlFor(post.image).width(900).height(500).url()}
-              alt={post.title}
-              fill
-              className="object-cover"
-            />
+            <Image src={urlFor(post.image).width(900).height(500).url()} alt={post.title} fill className="object-cover" />
           </div>
         )}
 
